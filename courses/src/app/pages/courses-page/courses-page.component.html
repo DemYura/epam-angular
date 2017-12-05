@@ -1,0 +1,7 @@
+<courses-header></courses-header>
+<courses-toolbox></courses-toolbox>
+<course-details 
+    *ngFor="let course of courses" 
+    [course]="course"
+    (onDelete)="deleteCourse($event)"></course-details>  
+<footer></footer>    
