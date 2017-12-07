@@ -1,0 +1,22 @@
+.header-container {
+    align-items: center;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: space-between;
+}
+
+.header-element {
+    margin: 10px;
+}
+
+.breadcrumbs {
+    flex-grow: 1;
+}
+
+.user-data-container {
+    display: flex;
+    flex-direction: column;
+}
+  
