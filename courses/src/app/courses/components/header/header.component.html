@@ -2,17 +2,17 @@
     <div class="header-element header-logo">
         <img src="../../../../assets/images/logo.png">
     </div>
-    <div class="header-element breadcrumbs">
+    <div class="header-element breadcrumbs" *ngIf="authService.isAuthenticated()">
         <div class="breadcrumbs-element">
             Courses
         </div>
     </div>
     <div class="header-element user-data-container">
-        <div class="header-element user-name">
+        <div class="header-element user-name" *ngIf="authService.isAuthenticated()">
             {{userName}}
         </div>        
         <div class="header-element">
-            <a href="#">Logoff</a>
+            <a href="#" (click)="logoutClicked()">Logoff</a>
         </div>
     </div>
 </div>

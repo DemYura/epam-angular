@@ -15,6 +15,11 @@
     </div>
     <div class="course-actions-container">
         <button>Edit course</button>
-        <button (click)="deleteCourse(course.id)">Delete course</button>
+        <button 
+            mwlConfirmationPopover
+            title="Delete course"
+            message="Do you really want to delete this course?"
+            placement="left"
+            (confirm)="deleteCourse(course.id)">Delete course</button>
     </div>
 </div>
