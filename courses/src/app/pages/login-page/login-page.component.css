@@ -1,0 +1,33 @@
+.login-form {
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+    margin: 100px;
+}
+
+.login-form-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form-row {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+}
+
+.login-form-item {
+    height: 30px;
+    margin: 10px;
+}
+
+.login-form-item input {
+    height: 30px;
+}
+
+.login-page {
+    display: block;
+    margin: auto;
+    width: 80%;
+}
+  

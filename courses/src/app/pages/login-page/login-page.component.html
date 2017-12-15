@@ -1,0 +1,19 @@
+<div class="login-page">
+    <courses-header></courses-header>
+    <div class="login-form login-form-column">
+        <div class="login-form-row">
+            <div class="login-form-column">
+                <div class="login-form-item">Login</div>
+                <div class="login-form-item">Password</div>
+            </div>
+            <div class="login-form-column">
+                <input class="login-form-item" [(ngModel)]="login"> 
+                <input class="login-form-item" [(ngModel)]="password"> 
+            </div>
+        </div>
+        <div class="login-form-row">
+            <button (click)="authenticate()">Enter</button>
+        </div>
+    </div>
+    <footer></footer>    
+</div>

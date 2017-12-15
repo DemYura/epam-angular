@@ -1,1 +1,2 @@
-<courses-page></courses-page>
+<login-page *ngIf="!authService.isAuthenticated()"></login-page>
+<courses-page *ngIf="authService.isAuthenticated()"></courses-page>
