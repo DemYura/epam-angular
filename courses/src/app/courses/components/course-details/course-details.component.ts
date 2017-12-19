@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Course } from '../../course';
+import { CourseBorderDirective } from '../../directives/course-border.directive';
 
 import '../../../../assets/css/styles.css';
-
 
 @Component({
   selector: 'course-details',
