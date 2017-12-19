@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import '../../../../assets/css/styles.css';
 
@@ -9,8 +9,9 @@ import '../../../../assets/css/styles.css';
 })
 export class ToolboxComponent { 
     private findCriteria: string = '';
+    @Output("onSearch") onFindEmitter = new EventEmitter<string>(); 
 
     onFindButtonClick() {
-        console.log(this.findCriteria);
+      this.onFindEmitter.emit(this.findCriteria);
     }
 }

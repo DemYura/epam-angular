@@ -7,21 +7,31 @@ import { ToolboxComponent } from '../../courses/components/toolbox/toolbox.compo
 import { CourseDetailsComponent } from '../../courses/components/course-details/course-details.component';
 
 import '../../../assets/css/styles.css';
+import { CoursesOrderByDatePipe } from '../../courses/pipes/courses-order-by-date.pipe';
+import { CourseSearchPipe } from '../../courses/pipes/course-search.pipe';
 
 @Component({
   selector: 'courses-page',
   templateUrl: './courses-page.component.html',
+  providers: [CourseSearchPipe],
   styles: [':host {display: block; margin: auto; width: 80%;}'],
 })
 export class CoursesPageComponent { 
   courses: Array<Course>;
 
-  constructor(private coursesService:CoursesService) {
+  constructor(
+      private coursesService:CoursesService, 
+      private courseSearchPipe:CourseSearchPipe) {
     this.courses = [];
   }
 
   ngOnInit() {
     this.updateCoursesList();
+  }
+
+  private onSearchCriteriaChanged(criteria: string): void {
+    this.courses = this.courseSearchPipe.transform(
+        this.coursesService.listCourses(), criteria);
   }
 
   private updateCoursesList(): void {
