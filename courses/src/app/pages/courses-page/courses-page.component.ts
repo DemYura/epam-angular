@@ -20,8 +20,8 @@ export class CoursesPageComponent {
   courses: Array<Course>;
 
   constructor(
-      private coursesService:CoursesService, 
-      private courseSearchPipe:CourseSearchPipe) {
+      public coursesService:CoursesService, 
+      public courseSearchPipe:CourseSearchPipe) {
     this.courses = [];
   }
 
@@ -29,7 +29,7 @@ export class CoursesPageComponent {
     this.updateCoursesList();
   }
 
-  private onSearchCriteriaChanged(criteria: string): void {
+  public onSearchCriteriaChanged(criteria: string): void {
     this.courses = this.courseSearchPipe.transform(
         this.coursesService.listCourses(), criteria);
   }

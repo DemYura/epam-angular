@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 
 module.exports = {
   entry: {
@@ -15,6 +16,10 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        test: /\.ts$/,
+        loader: '@ngtools/webpack',
+      },
       {
         test: /\.ts$/,
         loaders: [
@@ -36,7 +41,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: '.src/app',
+        include: '.src/app',
         // https://github.com/webpack-contrib/style-loader/issues/123
         loader: ['to-string-loader'].concat(ExtractTextPlugin.extract({ 
           fallbackLoader: 'style-loader', 
@@ -45,7 +50,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: '.src/app',
+        exclude: '.src/app',
         loader: 'raw-loader'
       }
     ]
@@ -66,6 +71,11 @@ module.exports = {
 
     new HtmlWebpackPlugin({
       template: 'src/index.html'
+    }),
+
+    new AngularCompilerPlugin({
+      tsConfigPath: 'tsconfig.json',
+      entryModule: './src/app/app.module#AppModule'
     })
   ]
 };
