@@ -4,6 +4,7 @@ import { BrowserModule }  from '@angular/platform-browser';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { CourseBorderDirective } from '../directives/course-border.directive';
 import { AuthService } from './auth/auth.service';
 
 @NgModule({

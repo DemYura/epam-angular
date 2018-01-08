@@ -1,5 +1,5 @@
 .details-container {
-    border: 1px solid black;
+    border: 3px solid black;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -35,4 +35,8 @@
 .course-name {
     font-weight: 900;
     margin-right: 30px;
+}
+
+.top-rated {
+    background-color: honeydew;
 }

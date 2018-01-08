@@ -1,9 +1,15 @@
-<div class="details-container">
+<div 
+    class="details-container" 
+    courseBorder [creationDate]="course.creationDate"
+    [ngClass]="{'top-rated': course.topRated}">
     <div class="course-data-container">
         <div class="course-data-header">
             <div>
-                <span class="course-name">{{course.name}}</span>
-                <span>{{computeDurationLabel(course.duration)}}</span>
+                <span class="course-name">{{course.name | uppercase}}</span>
+                <span>{{course.duration | courseDuration}}</span>
+                <span *ngIf="course.topRated">
+                    <img width="16px" height="16px" src="../../../../assets/images/star.png">
+                </span>
             </div>
             <div class="course-data-date">
                 {{course.creationDate | date:'dd MMM yyyy'}}

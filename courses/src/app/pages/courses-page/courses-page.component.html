@@ -1,7 +1,10 @@
 <courses-header></courses-header>
-<courses-toolbox></courses-toolbox>
+<div class="no-data" *ngIf="!courses || courses.length == 0">
+    No Data. Feel free to add new course.
+</div>
+<courses-toolbox (onSearch)="onSearchCriteriaChanged($event)"></courses-toolbox>
 <course-details 
-    *ngFor="let course of courses" 
+    *ngFor="let course of courses | coursesByDateSort"
     [course]="course"
     (onDelete)="deleteCourse($event)"></course-details>  
 <footer></footer>    

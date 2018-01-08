@@ -8,6 +8,10 @@ import { SharedModule } from './components/shared.module';
 import { ToolboxComponent } from './components/toolbox/toolbox.component';
 import { CourseDetailsComponent } from './components/course-details/course-details.component';
 import { CoursesService } from './courses.service';
+import { CourseBorderDirective } from './directives/course-border.directive';
+import { CourseDurationPipe } from './pipes/course-duration.pipe';
+import { CoursesOrderByDatePipe } from './pipes/courses-order-by-date.pipe';
+import { CourseSearchPipe } from './pipes/course-search.pipe';
 
 @NgModule({
   imports: [
@@ -20,11 +24,19 @@ import { CoursesService } from './courses.service';
   ],
   declarations: [
     ToolboxComponent, 
-    CourseDetailsComponent
+    CourseDetailsComponent,
+    CourseBorderDirective,
+    CourseDurationPipe,
+    CoursesOrderByDatePipe,
+    CourseSearchPipe,
   ],
   exports: [
     ToolboxComponent, 
-    CourseDetailsComponent
+    CourseDetailsComponent,
+    CourseBorderDirective,
+    CourseDurationPipe,
+    CoursesOrderByDatePipe,
+    CourseSearchPipe,
   ],
   providers: [ CoursesService ]
 })

@@ -8,9 +8,21 @@ export class CoursesService {
   private nextId = 1;
   
   constructor() {
-    this.addCourseWithDetails('Video course 1', this.getDescription(), 88);
-    this.addCourseWithDetails('Video course 2', this.getDescription(), 15);
-    this.addCourseWithDetails('Video course 3', this.getDescription(), 135);
+    const nowDate = new Date();
+    this.addCourseWithDetails(
+        'Video course 1', this.getDescription(), 88, nowDate.getTime(), true);
+    this.addCourseWithDetails(
+        'Video course 2', 
+        this.getDescription(), 
+        15,
+        new Date().setDate(nowDate.getDate() + 1),
+        false);
+    this.addCourseWithDetails(
+        'Video course 3', 
+        this.getDescription(), 
+        135, 
+        new Date().setDate(nowDate.getDate() - 15), 
+        false);
   }
 
   public listCourses(): Array<Course> {
@@ -19,17 +31,22 @@ export class CoursesService {
 
   public addCourse(course: Course): void {
     this.addCourseWithDetails(
-        course.name, course.description, course.duration);
+        course.name, course.description, course.duration, Date.now(), false);
   }
 
   public addCourseWithDetails(
-      name: string, description: string, duration: number): void {
+      name: string, 
+      description: string, 
+      duration: number, 
+      creationDate: number,
+      topRated: boolean): void {
     this.courses.push({
       id: this.nextId++,
       name: name,
       duration: duration,
-      creationDate: Date.now(),
-      description: description
+      creationDate: creationDate,
+      description: description,
+      topRated: topRated,
     });
   }
 
