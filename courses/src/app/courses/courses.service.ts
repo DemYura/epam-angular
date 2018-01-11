@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Course } from './course';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
 @Injectable()
 export class CoursesService {
-  private courses: Array<Course> = [];
+  private coursesSubject: BehaviorSubject<Course[]> = new BehaviorSubject([]);
   private nextId = 1;
   
   constructor() {
@@ -25,8 +27,8 @@ export class CoursesService {
         false);
   }
 
-  public listCourses(): Array<Course> {
-    return this.courses.slice();
+  public listCourses(): Observable<Course[]> {
+    return this.coursesSubject.asObservable();
   }
 
   public addCourse(course: Course): void {
@@ -40,7 +42,8 @@ export class CoursesService {
       duration: number, 
       creationDate: number,
       topRated: boolean): void {
-    this.courses.push({
+    const coursesArray = this.coursesSubject.getValue();
+    coursesArray.push({
       id: this.nextId++,
       name: name,
       duration: duration,
@@ -48,29 +51,34 @@ export class CoursesService {
       description: description,
       topRated: topRated,
     });
+    this.coursesSubject.next(coursesArray);
   }
 
   public updateCourse(courseWithNewData: Course): void {
-    this.courses.forEach(course => {
+    const coursesArray = this.coursesSubject.getValue();
+    coursesArray.forEach(course => {
       if (course.id === courseWithNewData.id) {
         course.name = courseWithNewData.name;
         course.description = courseWithNewData.description;
         course.duration = courseWithNewData.duration;
       }
     });
+    this.coursesSubject.next(coursesArray);
   }
 
-  public getCourse(courseId: number): Course {
-    const foundCourses = this.courses.filter(course => course.id === courseId);
+  public getCourse(courseId: number): Observable<Course> {
+    const foundCourses = 
+        this.coursesSubject.getValue().filter(course => course.id === courseId);
     if (foundCourses.length != 1) {
       throw new Error(
           `${foundCourses.length} courses found with id=${courseId}`);
     }
-    return foundCourses[0];
+    return Observable.of(foundCourses[0]);
   }
 
   public deleteCourse(courseId: number): void {
-    this.courses = this.courses.filter(course => course.id !== courseId);
+    this.coursesSubject.next(
+        this.coursesSubject.getValue().filter(course => course.id !== courseId));
   }
 
   getDescription() {

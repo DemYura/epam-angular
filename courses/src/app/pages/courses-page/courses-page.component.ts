@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Course } from '../../courses/course';
 import { CoursesService } from '../../courses/courses.service';
 import { HeaderComponent } from '../../courses/components/header/header.component';
@@ -9,6 +9,10 @@ import { CourseDetailsComponent } from '../../courses/components/course-details/
 import '../../../assets/css/styles.css';
 import { CoursesOrderByDatePipe } from '../../courses/pipes/courses-order-by-date.pipe';
 import { CourseSearchPipe } from '../../courses/pipes/course-search.pipe';
+import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'courses-page',
@@ -16,30 +20,27 @@ import { CourseSearchPipe } from '../../courses/pipes/course-search.pipe';
   providers: [CourseSearchPipe],
   styles: [':host {display: block; margin: auto; width: 80%;}'],
 })
-export class CoursesPageComponent { 
-  courses: Array<Course>;
+export class CoursesPageComponent implements OnInit { 
+  public courses$: Observable<Course[]>;
+  public searchCriteriaSubject$: BehaviorSubject<string> = new BehaviorSubject('');
 
   constructor(
       public coursesService:CoursesService, 
       public courseSearchPipe:CourseSearchPipe) {
-    this.courses = [];
+      
   }
 
   ngOnInit() {
-    this.updateCoursesList();
-  }
-
-  public onSearchCriteriaChanged(criteria: string): void {
-    this.courses = this.courseSearchPipe.transform(
-        this.coursesService.listCourses(), criteria);
-  }
-
-  private updateCoursesList(): void {
-    this.courses = this.coursesService.listCourses(); 
+    this.courses$ = 
+        this.searchCriteriaSubject$
+            .flatMap(
+                criteria => 
+                    this.coursesService.listCourses().pipe(
+                        map(courses => this.courseSearchPipe.transform(courses, criteria)))
+        );
   }
 
   private deleteCourse(courseId: number): void {
     this.coursesService.deleteCourse(courseId);
-    this.updateCoursesList();
   }
 }
