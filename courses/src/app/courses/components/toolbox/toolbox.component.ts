@@ -10,6 +10,7 @@ import '../../../../assets/css/styles.css';
 export class ToolboxComponent { 
     public findCriteria: string = '';
     @Output("onSearch") onFindEmitter = new EventEmitter<string>(); 
+    @Output("onAddCourse") onAddEmitter = new EventEmitter<void>(); 
 
     onFindButtonClick() {
       this.onFindEmitter.emit(this.findCriteria);

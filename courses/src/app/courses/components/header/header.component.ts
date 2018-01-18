@@ -9,10 +9,8 @@ import { AuthService } from '../auth/auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent { 
-  private userName: string;
 
-  constructor(public authService: AuthService) {
-    this.userName = authService.getUserName();
+  constructor(public authService: AuthService) {  
   }
 
   public logoutClicked(): void {

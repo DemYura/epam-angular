@@ -1,23 +1,34 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthService {
+
+  private authDetails: BehaviorSubject<AuthDetails> = 
+      new BehaviorSubject({userName: '', password: ''});  
  
   public login(userName: string, password: string): void {
-    localStorage.setItem('userName', userName);
+    this.authDetails.next({userName: userName, password: password});
     console.log('Successfully logged in!');
   }
 
   public logout(): void {
-    localStorage.removeItem('userName');
+    this.authDetails.next({userName: '', password: ''});
     console.log('Successfully logged out!');
   }
 
-  public isAuthenticated(): boolean {
-    return Boolean(this.getUserName());
+  public isAuthenticated(): Observable<boolean> {
+    return this.authDetails.map(userDetails => Boolean(userDetails.userName));
   }
 
-  public getUserName(): string {
-    return localStorage.getItem('userName');
+  public getUserName(): Observable<string> {
+    return this.authDetails.map(userDetails => 
+        userDetails ? userDetails.userName : null);
   }
+}
+
+interface AuthDetails {
+    userName: string,
+    password: string,
 }

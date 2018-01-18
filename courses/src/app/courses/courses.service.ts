@@ -2,14 +2,16 @@ import { Injectable } from '@angular/core';
 import { Course } from './course';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BackendCourse } from './course.backend';
+import { LoadingService } from './components/loading/loading.service';
 
 
 @Injectable()
 export class CoursesService {
-  private coursesSubject: BehaviorSubject<Course[]> = new BehaviorSubject([]);
+  private coursesSubject: BehaviorSubject<BackendCourse[]> = new BehaviorSubject([]);
   private nextId = 1;
   
-  constructor() {
+  constructor(private loadingService: LoadingService) {
     const nowDate = new Date();
     this.addCourseWithDetails(
         'Video course 1', this.getDescription(), 88, nowDate.getTime(), true);
@@ -28,7 +30,27 @@ export class CoursesService {
   }
 
   public listCourses(): Observable<Course[]> {
-    return this.coursesSubject.asObservable();
+    // map backend courses to frontend courses model with loading + delay
+    return this.coursesSubject.map(backendCourses => {
+        this.loadingService.show();
+        return backendCourses;
+    }).delay(1000).map(backendCourses => {
+        this.loadingService.hide();
+        return backendCourses.map(backendCourse => {
+            return this.toFrontendCourse(backendCourse)
+        })
+    });
+  }
+
+  private toFrontendCourse(backendCourse: BackendCourse) {
+    return {
+      id: backendCourse.id,
+      duration: backendCourse.duration,
+      creationDate: backendCourse.date,
+      name: backendCourse.name,
+      description: backendCourse.description,
+      topRated: backendCourse.topRated
+    };
   }
 
   public addCourse(course: Course): void {
@@ -47,7 +69,7 @@ export class CoursesService {
       id: this.nextId++,
       name: name,
       duration: duration,
-      creationDate: creationDate,
+      date: creationDate,
       description: description,
       topRated: topRated,
     });
@@ -73,7 +95,7 @@ export class CoursesService {
       throw new Error(
           `${foundCourses.length} courses found with id=${courseId}`);
     }
-    return Observable.of(foundCourses[0]);
+    return Observable.of(this.toFrontendCourse(foundCourses[0]));
   }
 
   public deleteCourse(courseId: number): void {

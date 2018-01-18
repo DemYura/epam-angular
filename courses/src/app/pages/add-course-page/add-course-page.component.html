@@ -1,0 +1,27 @@
+<courses-header></courses-header>
+<div class="course-form">
+    <div class="course-form-row">
+        <div class="course-form-row-title">Title</div>
+        <input [(ngModel)]="course.name">
+    </div>
+    <div class="course-form-row">
+        <div class="course-form-row-title">Description</div>
+        <input [(ngModel)]="course.description">
+    </div>
+    <div class="course-form-row">
+        <div class="course-form-row-title">Date</div>
+        <input [(ngModel)]="course.creationDate">
+    </div>
+    <div class="course-form-row">
+        <div class="course-form-row-title">Duration</div>
+        <div class="course-form-row-value">
+            <input [(ngModel)]="course.duration">
+            <span>{{course.duration | courseDuration}}</span>
+        </div>
+    </div>
+    <div class="course-form-row button-set">
+        <button>Save</button>
+        <button (click)="onCancelEmitter.emit()">Cancel</button>
+    </div>
+</div>
+<footer></footer>    

@@ -1,0 +1,27 @@
+:host {
+    display: block; 
+    margin: auto; 
+    width: 80%;
+}
+
+.course-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.course-form-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 20px;
+}
+
+.button-set {
+    justify-content: center;
+}
+
+.course-form-row-title {
+    margin-right: 20px;
+    text-align: right;
+    width: 50%;
+}
