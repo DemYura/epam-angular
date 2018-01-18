@@ -8,7 +8,7 @@ import '../../../../assets/css/styles.css';
   styleUrls: ['./toolbox.component.css']
 })
 export class ToolboxComponent { 
-    private findCriteria: string = '';
+    public findCriteria: string = '';
     @Output("onSearch") onFindEmitter = new EventEmitter<string>(); 
 
     onFindButtonClick() {

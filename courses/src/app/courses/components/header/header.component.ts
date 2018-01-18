@@ -11,11 +11,11 @@ import { AuthService } from '../auth/auth.service';
 export class HeaderComponent { 
   private userName: string;
 
-  constructor(private authService: AuthService) {
+  constructor(public authService: AuthService) {
     this.userName = authService.getUserName();
   }
 
-  private logoutClicked(): void {
+  public logoutClicked(): void {
     this.authService.logout();
   }
 }
