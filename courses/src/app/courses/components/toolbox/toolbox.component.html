@@ -3,5 +3,5 @@
         <input [(ngModel)]="findCriteria">
         <button (click)="onFindButtonClick()">Find</button>
     </div>
-    <button>Add Course</button>
+    <button (click)="onAddEmitter.emit()">Add Course</button>
 </div>

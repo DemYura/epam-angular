@@ -1,2 +1,6 @@
-<login-page *ngIf="!authService.isAuthenticated()"></login-page>
-<courses-page *ngIf="authService.isAuthenticated()"></courses-page>
+<login-page *ngIf="!(authService.isAuthenticated() | async)"></login-page>
+<div *ngIf="authService.isAuthenticated() | async">
+    <courses-page *ngIf="!(addingCourse$ | async)" (onAddCourse)="addingCourse$.next(true)"></courses-page>
+    <add-course-page *ngIf="addingCourse$ | async" (onCancelAdding)="addingCourse$.next(false)"></add-course-page>
+</div>
+<loading-component></loading-component>

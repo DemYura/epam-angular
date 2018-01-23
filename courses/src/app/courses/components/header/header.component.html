@@ -2,14 +2,14 @@
     <div class="header-element header-logo">
         <img src="../../../../assets/images/logo.png">
     </div>
-    <div class="header-element breadcrumbs" *ngIf="authService.isAuthenticated()">
+    <div class="header-element breadcrumbs" *ngIf="authService.isAuthenticated() | async">
         <div class="breadcrumbs-element">
             Courses
         </div>
     </div>
     <div class="header-element user-data-container">
-        <div class="header-element user-name" *ngIf="authService.isAuthenticated()">
-            {{userName}}
+        <div class="header-element user-name" *ngIf="authService.isAuthenticated() | async">
+            {{authService.getUserName() | async }}
         </div>        
         <div class="header-element">
             <a href="#" (click)="logoutClicked()">Logoff</a>

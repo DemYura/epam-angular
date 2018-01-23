@@ -4,8 +4,9 @@ import { BrowserModule }  from '@angular/platform-browser';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { CourseBorderDirective } from '../directives/course-border.directive';
 import { AuthService } from './auth/auth.service';
+import { LoadingComponent } from './loading/loading.component';
+import { LoadingService } from './loading/loading.service';
 
 @NgModule({
   imports: [
@@ -15,11 +16,16 @@ import { AuthService } from './auth/auth.service';
   declarations: [
     HeaderComponent, 
     FooterComponent,
+    LoadingComponent
   ],
   exports: [
     HeaderComponent, 
     FooterComponent,
+    LoadingComponent,
   ],
-  providers: [ AuthService ]
+  providers: [ 
+    AuthService,
+    LoadingService 
+  ]
 })
 export class SharedModule { }

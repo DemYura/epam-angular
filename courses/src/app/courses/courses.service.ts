@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Course } from './course';
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BackendCourse } from './course.backend';
+import { LoadingService } from './components/loading/loading.service';
 
 
 @Injectable()
 export class CoursesService {
-  private courses: Array<Course> = [];
+  private coursesSubject: BehaviorSubject<BackendCourse[]> = new BehaviorSubject([]);
   private nextId = 1;
   
-  constructor() {
+  constructor(private loadingService: LoadingService) {
     const nowDate = new Date();
     this.addCourseWithDetails(
         'Video course 1', this.getDescription(), 88, nowDate.getTime(), true);
@@ -25,8 +29,28 @@ export class CoursesService {
         false);
   }
 
-  public listCourses(): Array<Course> {
-    return this.courses.slice();
+  public listCourses(): Observable<Course[]> {
+    // map backend courses to frontend courses model with loading + delay
+    return this.coursesSubject.map(backendCourses => {
+        this.loadingService.show();
+        return backendCourses;
+    }).delay(1000).map(backendCourses => {
+        this.loadingService.hide();
+        return backendCourses.map(backendCourse => {
+            return this.toFrontendCourse(backendCourse)
+        })
+    });
+  }
+
+  private toFrontendCourse(backendCourse: BackendCourse) {
+    return {
+      id: backendCourse.id,
+      duration: backendCourse.duration,
+      creationDate: backendCourse.date,
+      name: backendCourse.name,
+      description: backendCourse.description,
+      topRated: backendCourse.topRated
+    };
   }
 
   public addCourse(course: Course): void {
@@ -40,37 +64,43 @@ export class CoursesService {
       duration: number, 
       creationDate: number,
       topRated: boolean): void {
-    this.courses.push({
+    const coursesArray = this.coursesSubject.getValue();
+    coursesArray.push({
       id: this.nextId++,
       name: name,
       duration: duration,
-      creationDate: creationDate,
+      date: creationDate,
       description: description,
       topRated: topRated,
     });
+    this.coursesSubject.next(coursesArray);
   }
 
   public updateCourse(courseWithNewData: Course): void {
-    this.courses.forEach(course => {
+    const coursesArray = this.coursesSubject.getValue();
+    coursesArray.forEach(course => {
       if (course.id === courseWithNewData.id) {
         course.name = courseWithNewData.name;
         course.description = courseWithNewData.description;
         course.duration = courseWithNewData.duration;
       }
     });
+    this.coursesSubject.next(coursesArray);
   }
 
-  public getCourse(courseId: number): Course {
-    const foundCourses = this.courses.filter(course => course.id === courseId);
+  public getCourse(courseId: number): Observable<Course> {
+    const foundCourses = 
+        this.coursesSubject.getValue().filter(course => course.id === courseId);
     if (foundCourses.length != 1) {
       throw new Error(
           `${foundCourses.length} courses found with id=${courseId}`);
     }
-    return foundCourses[0];
+    return Observable.of(this.toFrontendCourse(foundCourses[0]));
   }
 
   public deleteCourse(courseId: number): void {
-    this.courses = this.courses.filter(course => course.id !== courseId);
+    this.coursesSubject.next(
+        this.coursesSubject.getValue().filter(course => course.id !== courseId));
   }
 
   getDescription() {
