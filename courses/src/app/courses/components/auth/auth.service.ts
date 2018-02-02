@@ -1,16 +1,47 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { Http, RequestOptions, Headers, RequestMethod, Request } from '@angular/http';
 
 @Injectable()
 export class AuthService {
-
+  private baseUrl: string;
   private authDetails: BehaviorSubject<AuthDetails> = 
       new BehaviorSubject({userName: '', password: ''});  
+
+  constructor(private http: Http) {
+    this.baseUrl = 'http://localhost:3004';
+  }
  
   public login(userName: string, password: string): void {
-    this.authDetails.next({userName: userName, password: password});
-    console.log('Successfully logged in!');
+    const requestOptions = new RequestOptions();
+    requestOptions.url = `${this.baseUrl}/auth/login`;
+    requestOptions.method = RequestMethod.Post;
+    requestOptions.body = { login: userName, password: password };       
+    this.http.request(new Request(requestOptions))
+        .subscribe(response => {
+            if (response) {
+              const authRequestOptions = new RequestOptions();
+              authRequestOptions.url = `${this.baseUrl}/auth/userInfo`;
+              authRequestOptions.method = RequestMethod.Post;
+              authRequestOptions.headers = new Headers({
+                  'Authorization': response.json().token
+              });
+              this.http.request(new Request(authRequestOptions))
+                  .subscribe(userInfoResponse => {
+                      if (userInfoResponse) {
+                          const name = userInfoResponse.json().name;
+                          this.authDetails.next({
+                              userName: `${name.first} ${name.last}`, 
+                              password: password,
+                          });
+                          console.log('Successfully logged in!');
+                      }
+                    },
+                    err => console.log(err));
+            }
+          },
+          err => console.log(err));
   }
 
   public logout(): void {

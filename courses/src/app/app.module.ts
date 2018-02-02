@@ -7,15 +7,17 @@ import { CoursesPageModule } from './pages/courses-page/courses-page.module';
 import { LoginPageModule } from './pages/login-page/login-page.module';
 import { SharedModule } from './courses/components/shared.module';
 import { AddCoursePageModule } from './pages/add-course-page/add-course-page.module';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   imports: [
     BrowserModule, 
+    HttpModule,
     FormsModule, 
     CoursesPageModule, 
     AddCoursePageModule,
     LoginPageModule, 
-    SharedModule
+    SharedModule,
   ],
   declarations: [
     AppComponent,
