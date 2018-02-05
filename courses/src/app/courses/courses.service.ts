@@ -4,14 +4,20 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { BackendCourse } from './course.backend';
 import { LoadingService } from './components/loading/loading.service';
+import { Http, RequestOptions, RequestMethod, URLSearchParams, Request } from '@angular/http';
+import { AuthorizedHttp } from './components/auth/authorized-http.service';
 
 
 @Injectable()
 export class CoursesService {
+  private baseUrl: string;
   private coursesSubject: BehaviorSubject<BackendCourse[]> = new BehaviorSubject([]);
   private nextId = 1;
   
-  constructor(private loadingService: LoadingService) {
+  constructor(
+      private loadingService: LoadingService,
+      private http: AuthorizedHttp) {
+    this.baseUrl = 'http://localhost:3004'; 
     const nowDate = new Date();
     this.addCourseWithDetails(
         'Video course 1', this.getDescription(), 88, nowDate.getTime(), true);
@@ -29,27 +35,34 @@ export class CoursesService {
         false);
   }
 
-  public listCourses(): Observable<Course[]> {
-    // map backend courses to frontend courses model with loading + delay
-    return this.coursesSubject.map(backendCourses => {
-        this.loadingService.show();
-        return backendCourses;
-    }).delay(1000).map(backendCourses => {
-        this.loadingService.hide();
-        return backendCourses.map(backendCourse => {
-            return this.toFrontendCourse(backendCourse)
-        })
-    });
+  public listCoursesPage(startIndex: number, count: number, searchCriteria: string): Observable<Course[]> {
+    const requestOptions = new RequestOptions();
+    requestOptions.url = `${this.baseUrl}/courses`;
+    requestOptions.method = RequestMethod.Get;
+    const params = new URLSearchParams();
+    params.set('start', String(startIndex));
+    params.set('count', String(count));
+    params.set('search', searchCriteria);
+    requestOptions.params = params;
+
+    this.loadingService.show()
+
+    return this.http.request(new Request(requestOptions))
+        .map(backendCourses => {
+            this.loadingService.hide();
+            return (<BackendCourse[]>backendCourses.json())
+                .map(backendCourse => this.toFrontendCourse(backendCourse))
+        });
   }
 
-  private toFrontendCourse(backendCourse: BackendCourse) {
+  private toFrontendCourse(backendCourse: BackendCourse): Course {
     return {
       id: backendCourse.id,
-      duration: backendCourse.duration,
-      creationDate: backendCourse.date,
+      duration: backendCourse.length,
+      creationDate: Date.parse(backendCourse.date),
       name: backendCourse.name,
       description: backendCourse.description,
-      topRated: backendCourse.topRated
+      topRated: backendCourse.isTopRated
     };
   }
 
@@ -68,10 +81,10 @@ export class CoursesService {
     coursesArray.push({
       id: this.nextId++,
       name: name,
-      duration: duration,
-      date: creationDate,
+      length: duration,
+      date: new Date(creationDate).toISOString(),
       description: description,
-      topRated: topRated,
+      isTopRated: topRated,
     });
     this.coursesSubject.next(coursesArray);
   }
@@ -82,7 +95,7 @@ export class CoursesService {
       if (course.id === courseWithNewData.id) {
         course.name = courseWithNewData.name;
         course.description = courseWithNewData.description;
-        course.duration = courseWithNewData.duration;
+        course.length = courseWithNewData.duration;
       }
     });
     this.coursesSubject.next(coursesArray);
@@ -98,9 +111,14 @@ export class CoursesService {
     return Observable.of(this.toFrontendCourse(foundCourses[0]));
   }
 
-  public deleteCourse(courseId: number): void {
-    this.coursesSubject.next(
-        this.coursesSubject.getValue().filter(course => course.id !== courseId));
+  public deleteCourse(courseId: number): Observable<any> {
+    this.loadingService.show();
+
+    return this.http.delete(`${this.baseUrl}/courses/${courseId}`)
+        .map((result) => {
+          this.loadingService.hide();
+          return result;
+        });
   }
 
   getDescription() {

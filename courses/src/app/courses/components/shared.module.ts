@@ -8,6 +8,8 @@ import { FooterComponent } from './footer/footer.component';
 import { AuthService } from './auth/auth.service';
 import { LoadingComponent } from './loading/loading.component';
 import { LoadingService } from './loading/loading.service';
+import { AuthorizedHttp } from './auth/authorized-http.service';
+import { XHRBackend, RequestOptions } from '@angular/http';
 
 @NgModule({
   imports: [
@@ -27,7 +29,14 @@ import { LoadingService } from './loading/loading.service';
   ],
   providers: [ 
     AuthService,
-    LoadingService 
+    {
+      provide: AuthorizedHttp,
+      useFactory: (backend: XHRBackend, options: RequestOptions, authService: AuthService) => {
+        return new AuthorizedHttp(backend, options, authService);
+      },
+      deps: [XHRBackend, RequestOptions, AuthService]
+    },
+    LoadingService,
   ]
 })
 export class SharedModule { }

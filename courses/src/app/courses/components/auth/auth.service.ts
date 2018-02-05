@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Http, RequestOptions, Headers, RequestMethod, Request } from '@angular/http';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class AuthService {
   private baseUrl: string;
   private authDetails: BehaviorSubject<AuthDetails> = 
       new BehaviorSubject({userName: '', password: ''});  
+  public tokenSubject$: BehaviorSubject<string> = new BehaviorSubject('');
 
   constructor(private http: Http) {
     this.baseUrl = 'http://localhost:3004';
@@ -21,6 +23,7 @@ export class AuthService {
     this.http.request(new Request(requestOptions))
         .subscribe(response => {
             if (response) {
+              this.tokenSubject$.next(response.json().token);
               const authRequestOptions = new RequestOptions();
               authRequestOptions.url = `${this.baseUrl}/auth/userInfo`;
               authRequestOptions.method = RequestMethod.Post;

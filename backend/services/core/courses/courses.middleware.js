@@ -10,14 +10,18 @@ module.exports = (server) => {
 			from = query.start,
 			to = +query.start + +query.count,
 			sort = query.sort,
-			queryStr = query.query,
+			search = query.search,
 			courses = server.db.getState().courses;
 		console.log(sort);
-		console.log(queryStr);
+		console.log(search);
 		if (courses.length < to) {
 			to = courses.length;
 		}
-		courses = courses.slice(from, to);
+		courses = courses
+			.filter(course => 
+				course.name.indexOf(search) >= 0 ||
+				course.description.indexOf(search) >= 0)
+			.slice(from, to);
 		
 		res.json(courses);
 	});

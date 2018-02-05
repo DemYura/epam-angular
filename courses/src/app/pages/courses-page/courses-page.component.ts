@@ -8,49 +8,53 @@ import { CourseDetailsComponent } from '../../courses/components/course-details/
 
 import '../../../assets/css/styles.css';
 import { CoursesOrderByDatePipe } from '../../courses/pipes/courses-order-by-date.pipe';
-import { CourseSearchPipe } from '../../courses/pipes/course-search.pipe';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'courses-page',
   templateUrl: './courses-page.component.html',
-  providers: [CourseSearchPipe],
   styles: [':host {display: block; margin: auto; width: 80%;}'],
 })
 export class CoursesPageComponent implements OnInit { 
+  public pageSize = 5;  
   public courses$: Observable<Course[]>;
   public searchCriteriaSubject$: BehaviorSubject<string> = new BehaviorSubject('');
+  public pageSubject$: BehaviorSubject<number> = new BehaviorSubject(0);
+  public deleteCourseSubject$: Subject<number> = new Subject();
   @Output("onAddCourse") onAddEmitter = new EventEmitter<void>(); 
 
   constructor(
-      public coursesService:CoursesService, 
-      public courseSearchPipe:CourseSearchPipe) {
+      public coursesService:CoursesService) {
       
   }
 
   ngOnInit() {
+    this.deleteCourseSubject$
+        .subscribe(courseId => 
+            this.coursesService.deleteCourse(courseId)
+                .subscribe(() => this.pageSubject$.next(this.pageSubject$.getValue()))
+        )
+
     this.courses$ = 
         this.searchCriteriaSubject$
-            .flatMap(
-                criteria => 
-                    this.coursesService.listCourses()
-                        .map(courses => 
-                            this.courseSearchPipe
-                                .transform(courses, criteria)
-                                // filter the result by date
-                                .filter((course: Course) => {
-                                    const currentDate = new Date();
-                                    const lastTwoWeeks = new Date();
-                                    lastTwoWeeks.setDate(currentDate.getDate() - 14);
-                                    return new Date(course.creationDate) > lastTwoWeeks;
-                                })
-                        )
+            .map(criteria => { 
+                this.pageSubject$.next(0);
+                return {criteria: criteria, start: 0}
+            })
+        .merge(this.pageSubject$
+            .map(pageNumber => {
+                return { 
+                    criteria: this.searchCriteriaSubject$.getValue(), 
+                    start: pageNumber * this.pageSize
+                }
+            }))
+        .mergeMap(
+            (params: {criteria: string, start: number}) => 
+                this.coursesService.listCoursesPage(
+                    params.start, this.pageSize, params.criteria)
         );
-  }
-
-  private deleteCourse(courseId: number): void {
-    this.coursesService.deleteCourse(courseId);
   }
 }
