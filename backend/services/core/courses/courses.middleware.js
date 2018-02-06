@@ -17,11 +17,15 @@ module.exports = (server) => {
 		if (courses.length < to) {
 			to = courses.length;
 		}
-		courses = courses
-			.filter(course => 
-				course.name.indexOf(search) >= 0 ||
-				course.description.indexOf(search) >= 0)
-			.slice(from, to);
+		
+		if (search) {
+			courses = courses
+				.filter(course => 
+					course.name.indexOf(search) >= 0 ||
+					course.description.indexOf(search) >= 0);
+		}
+
+		courses = courses.slice(from, to);
 		
 		res.json(courses);
 	});
