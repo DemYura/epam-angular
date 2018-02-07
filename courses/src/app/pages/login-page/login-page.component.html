@@ -2,6 +2,9 @@
     <courses-header></courses-header>
     <div class="login-form login-form-column">
         <div class="login-form-row">
+            <span class="auth-error">{{authService.authErrorSubject$ | async}}</span>
+        </div>
+        <div class="login-form-row">
             <div class="login-form-column">
                 <div class="login-form-item">Login</div>
                 <div class="login-form-item">Password</div>

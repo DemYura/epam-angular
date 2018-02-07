@@ -10,6 +10,7 @@ export class AuthService {
   private authDetails: BehaviorSubject<AuthDetails> = 
       new BehaviorSubject({userName: '', password: ''});  
   public tokenSubject$: BehaviorSubject<string> = new BehaviorSubject('');
+  public authErrorSubject$: Subject<string> = new Subject();
 
   constructor(private http: Http) {
     this.baseUrl = 'http://localhost:3004';
@@ -44,7 +45,7 @@ export class AuthService {
                     err => console.log(err));
             }
           },
-          err => console.log(err));
+          err => this.authErrorSubject$.next('Incorrect login/password'));
   }
 
   public logout(): void {
