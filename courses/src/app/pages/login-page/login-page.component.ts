@@ -15,7 +15,7 @@ export class LoginPageComponent {
   public password: string;
 
   constructor(public authService: AuthService) {
-
+    
   }
 
   public authenticate(): void {

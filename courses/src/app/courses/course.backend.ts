@@ -1,8 +1,8 @@
 export interface BackendCourse {
   id: number;
-  duration: number;
-  date: number;
+  length: number;
+  date: string;
   name: string;
   description: string;
-  topRated: boolean;
+  isTopRated: boolean;
 }
