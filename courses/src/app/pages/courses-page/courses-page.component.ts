@@ -20,9 +20,10 @@ import { Subject } from 'rxjs/Subject';
 })
 export class CoursesPageComponent implements OnInit { 
   public pageSize = 5;  
+  public pageNumber = 0;
   public courses$: Observable<Course[]>;
   public searchCriteriaSubject$: BehaviorSubject<string> = new BehaviorSubject('');
-  public pageSubject$: BehaviorSubject<number> = new BehaviorSubject(0);
+  public pageSubject$: Subject<number> = new Subject();
   public deleteCourseSubject$: Subject<number> = new Subject();
   @Output("onAddCourse") onAddEmitter = new EventEmitter<void>(); 
 
@@ -35,17 +36,18 @@ export class CoursesPageComponent implements OnInit {
     this.deleteCourseSubject$
         .subscribe(courseId => 
             this.coursesService.deleteCourse(courseId)
-                .subscribe(() => this.pageSubject$.next(this.pageSubject$.getValue()))
+                .subscribe(() => this.pageSubject$.next(this.pageNumber))
         )
 
     this.courses$ = 
         this.searchCriteriaSubject$
             .map(criteria => { 
-                this.pageSubject$.next(0);
+                this.pageNumber = 0;
                 return {criteria: criteria, start: 0}
             })
         .merge(this.pageSubject$
             .map(pageNumber => {
+                this.pageNumber = pageNumber;
                 return { 
                     criteria: this.searchCriteriaSubject$.getValue(), 
                     start: pageNumber * this.pageSize
@@ -55,6 +57,7 @@ export class CoursesPageComponent implements OnInit {
             (params: {criteria: string, start: number}) => 
                 this.coursesService.listCoursesPage(
                     params.start, this.pageSize, params.criteria)
-        );
+        )
+        .share();
   }
 }
