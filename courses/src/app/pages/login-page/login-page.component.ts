@@ -11,14 +11,15 @@ import { AuthService } from '../../courses/components/auth/auth.service';
   styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent { 
-  public login: string;
-  public password: string;
+  public user = {
+    login:'', 
+    password:''
+  };
 
-  constructor(public authService: AuthService) {
-    
+  constructor(public authService: AuthService) { 
   }
 
   public authenticate(): void {
-    this.authService.login(this.login, this.password);
+    this.authService.login(this.user.login, this.user.password);
   }
 }

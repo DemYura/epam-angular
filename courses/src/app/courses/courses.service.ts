@@ -45,7 +45,8 @@ export class CoursesService {
       creationDate: Date.parse(backendCourse.date),
       name: backendCourse.name,
       description: backendCourse.description,
-      topRated: backendCourse.isTopRated
+      topRated: backendCourse.isTopRated,
+      authors: [],
     };
   }
 
@@ -57,5 +58,12 @@ export class CoursesService {
           this.loadingService.hide();
           return result;
         });
+  }
+
+  public listAuthors(): Observable<string[]> {
+    return this.http.get(`${this.baseUrl}/authors`)
+        .map((result) => {
+          return <string[]>result.json();
+        })
   }
 }

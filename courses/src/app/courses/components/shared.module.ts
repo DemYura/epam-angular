@@ -10,6 +10,9 @@ import { LoadingComponent } from './loading/loading.component';
 import { LoadingService } from './loading/loading.service';
 import { AuthorizedHttp } from './auth/authorized-http.service';
 import { XHRBackend, RequestOptions } from '@angular/http';
+import { CourseAuthorsControl } from './controls/course-authors.control';
+import { CourseDateControl } from './controls/course-date.control';
+import { CourseDurationControl } from './controls/course-duration.control';
 
 @NgModule({
   imports: [
@@ -20,12 +23,18 @@ import { XHRBackend, RequestOptions } from '@angular/http';
   declarations: [
     HeaderComponent, 
     FooterComponent,
-    LoadingComponent
+    LoadingComponent,
+    CourseAuthorsControl,
+    CourseDateControl,
+    CourseDurationControl
   ],
   exports: [
     HeaderComponent, 
     FooterComponent,
     LoadingComponent,
+    CourseAuthorsControl,
+    CourseDateControl,
+    CourseDurationControl
   ],
   providers: [ 
     AuthService,

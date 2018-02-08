@@ -29,6 +29,22 @@ module.exports = (server) => {
 		
 		res.json(courses);
 	});
+
+	router.get('/authors', (req, res, next) => {
+		const authors = [];
+		server.db.getState()
+			.courses
+			.forEach(course => {
+				course.authors.forEach(author => {
+					const name = `${author.firstName} ${author.lastName}`;
+					if (authors.indexOf(name) < 0) {
+						authors.push(name);
+					}
+				})
+			});
+
+		res.json(authors);
+	});
 	
 	return router;
 };

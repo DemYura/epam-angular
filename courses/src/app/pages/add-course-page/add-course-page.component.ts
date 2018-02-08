@@ -25,11 +25,18 @@ export class AddCoursePageComponent {
       creationDate: 0, 
       description: '', 
       duration: 0, 
-      topRated: false
+      topRated: false,
+      authors: [],
   };
-
+  public authors$: Observable<string[]>;
+  
   @Output("onCancelAdding") onCancelEmitter = new EventEmitter<void>(); 
     
-  constructor(public coursesService:CoursesService) {    
+  constructor(public coursesService:CoursesService) { 
+    this.authors$ = coursesService.listAuthors();
+  }
+
+  onFormSubmit(form:any) {
+    console.dir(this.course);
   }
 }
