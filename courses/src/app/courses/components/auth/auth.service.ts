@@ -50,7 +50,6 @@ export class AuthService {
 
   public logout(): void {
     this.authDetails.next({userName: '', password: ''});
-    console.log('Successfully logged out!');
   }
 
   public isAuthenticated(): Observable<boolean> {

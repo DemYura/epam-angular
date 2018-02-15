@@ -15,7 +15,12 @@
             <div 
                 class="validation-errors"
                 *ngIf="title?.invalid && title.dirty">
-                {{title?.errors | json}}
+                <div *ngIf="title.errors.required">
+                    Title is required.
+                </div>
+                <div *ngIf="title.errors.minlength">
+                    The minimum length is {{title.errors.minlength.requiredLength}}.
+                </div>
             </div>
         </div>
         <div class="course-form-row">

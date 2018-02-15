@@ -21,7 +21,9 @@
                         <div 
                             class="validation-errors"
                             *ngIf="login?.invalid && login.dirty">
-                          {{login?.errors | json}}
+                            <div *ngIf="login.errors.required">
+                                Login is required.
+                            </div>
                         </div>
                     </div>
                     <div class="input-container">
@@ -35,7 +37,9 @@
                         <div 
                             class="validation-errors"
                             *ngIf="password?.invalid && password.dirty">
-                          {{password?.errors | json}}
+                            <div *ngIf="password.errors.required">
+                                Password is required.
+                            </div>
                         </div>
                     </div>
                 </div>

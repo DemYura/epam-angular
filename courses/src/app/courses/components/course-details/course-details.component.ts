@@ -14,6 +14,7 @@ import '../../../../assets/css/styles.css';
 export class CourseDetailsComponent { 
     @Input() course: Course;
     @Output("onDelete") onDeleteEmitter = new EventEmitter<number>(); 
+    @Output("onEdit") onEditEmitter = new EventEmitter<Course>();
 
     deleteCourse(courseId: number) {
         this.onDeleteEmitter.emit(courseId);

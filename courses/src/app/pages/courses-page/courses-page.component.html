@@ -8,7 +8,8 @@
 <course-details 
     *ngFor="let course of courses$ | async | coursesByDateSort"
     [course]="course"
-    (onDelete)="deleteCourseSubject$.next($event)"></course-details>  
+    (onDelete)="deleteCourseSubject$.next($event)"
+    (onEdit)="onEditEmitter.emit($event)"></course-details>  
 <button 
     *ngIf="pageNumber > 0"
     (click)="pageSubject$.next(pageNumber - 1)">Previous page</button>    
