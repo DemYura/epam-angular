@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { Course } from '../../courses/course';
 import { CoursesService } from '../../courses/courses.service';
 import { HeaderComponent } from '../../courses/components/header/header.component';
@@ -19,17 +19,24 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
   styleUrls: ['./add-course-page.component.css'],
 })
 export class AddCoursePageComponent { 
-  public course:Course = {
-      id:0, 
-      name:'', 
-      creationDate: 0, 
-      description: '', 
-      duration: 0, 
-      topRated: false
-  };
-
+  @Input() public course: Course = {
+    id:0, 
+    name:'', 
+    creationDate: 0, 
+    description: '', 
+    duration: 0, 
+    topRated: false,
+    authors: [],
+  };;
+  public authors$: Observable<string[]>;
+  
   @Output("onCancelAdding") onCancelEmitter = new EventEmitter<void>(); 
     
-  constructor(public coursesService:CoursesService) {    
+  constructor(public coursesService:CoursesService) { 
+    this.authors$ = coursesService.listAuthors();
+  }
+
+  onFormSubmit(form:any) {
+    console.dir(this.course);
   }
 }

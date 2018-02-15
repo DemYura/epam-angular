@@ -1,6 +1,6 @@
 <login-page *ngIf="!(authService.isAuthenticated() | async)"></login-page>
 <div *ngIf="authService.isAuthenticated() | async">
-    <courses-page *ngIf="!(addingCourse$ | async)" (onAddCourse)="addingCourse$.next(true)"></courses-page>
-    <add-course-page *ngIf="addingCourse$ | async" (onCancelAdding)="addingCourse$.next(false)"></add-course-page>
+    <courses-page *ngIf="!(addingCourse$ | async)" (onAddCourse)="onAddCourse($event)" (onEditCourse)="onEditCourse($event)"></courses-page>
+    <add-course-page *ngIf="addingCourse$ | async" (onCancelAdding)="addingCourse$.next(false)" [course]="courseSubject$ | async"></add-course-page>
 </div>
 <loading-component></loading-component>

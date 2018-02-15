@@ -26,6 +26,7 @@ export class CoursesPageComponent implements OnInit {
   public pageSubject$: Subject<number> = new Subject();
   public deleteCourseSubject$: Subject<number> = new Subject();
   @Output("onAddCourse") onAddEmitter = new EventEmitter<void>(); 
+  @Output("onEditCourse") onEditEmitter = new EventEmitter<Course>();
 
   constructor(
       public coursesService:CoursesService) {

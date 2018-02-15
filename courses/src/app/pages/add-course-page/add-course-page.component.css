@@ -25,3 +25,15 @@
     text-align: right;
     width: 50%;
 }
+
+.validation-errors {
+    color: red;
+}
+  
+.ng-invalid.ng-dirty {
+    border: 1px solid red;
+}
+
+form.ng-invalid.ng-dirty {
+    border: none;
+}

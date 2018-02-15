@@ -31,7 +31,17 @@
     width: 80%;
 }
 
-.auth-error {
+.input-container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+input.ng-invalid.ng-dirty {
+    border: 1px solid red;
+}
+
+.validation-errors {
     color: red;
 }
   

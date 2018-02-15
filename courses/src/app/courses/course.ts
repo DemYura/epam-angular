@@ -5,4 +5,5 @@ export interface Course {
   name: string;
   description: string;
   topRated: boolean;
+  authors: string[]
 }

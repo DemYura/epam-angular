@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="course-actions-container">
-        <button>Edit course</button>
+        <button (click)="onEditEmitter.emit(course)">Edit course</button>
         <button 
             mwlConfirmationPopover
             title="Delete course"

@@ -1,22 +1,53 @@
 <div class="login-page">
     <courses-header></courses-header>
     <div class="login-form login-form-column">
-        <div class="login-form-row">
-            <span class="auth-error">{{authService.authErrorSubject$ | async}}</span>
-        </div>
-        <div class="login-form-row">
-            <div class="login-form-column">
-                <div class="login-form-item">Login</div>
-                <div class="login-form-item">Password</div>
+        <form #form="ngForm" (submit)="authenticate()">
+            <div class="login-form-row">
+                <span class="validation-errors">{{authService.authErrorSubject$ | async}}</span>
             </div>
-            <div class="login-form-column">
-                <input class="login-form-item" [(ngModel)]="login"> 
-                <input class="login-form-item" type="password" [(ngModel)]="password"> 
+            <div class="login-form-row">
+                <div class="login-form-column">
+                    <label class="login-form-item" for="login">Login</label>
+                    <label class="login-form-item" for="password">Password</label>
+                </div>
+                <div class="login-form-column">
+                    <div class="input-container">
+                        <input 
+                            class="login-form-item" 
+                            required
+                            name="login"
+                            #login="ngModel"
+                            [(ngModel)]="user.login"> 
+                        <div 
+                            class="validation-errors"
+                            *ngIf="login?.invalid && login.dirty">
+                            <div *ngIf="login.errors.required">
+                                Login is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <input 
+                            class="login-form-item" 
+                            type="password"
+                            required
+                            name="password"
+                            #password="ngModel"
+                            [(ngModel)]="user.password">
+                        <div 
+                            class="validation-errors"
+                            *ngIf="password?.invalid && password.dirty">
+                            <div *ngIf="password.errors.required">
+                                Password is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="login-form-row">
-            <button (click)="authenticate()">Enter</button>
-        </div>
+            <div class="login-form-row">
+                <button [disabled]="form.invalid || form.pristine">Enter</button>
+            </div>
+        </form>
     </div>
     <footer></footer>    
 </div>
