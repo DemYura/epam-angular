@@ -1,6 +1,4 @@
-<login-page *ngIf="!(authService.isAuthenticated() | async)"></login-page>
-<div *ngIf="authService.isAuthenticated() | async">
-    <courses-page *ngIf="!(addingCourse$ | async)" (onAddCourse)="onAddCourse($event)" (onEditCourse)="onEditCourse($event)"></courses-page>
-    <add-course-page *ngIf="addingCourse$ | async" (onCancelAdding)="addingCourse$.next(false)" [course]="courseSubject$ | async"></add-course-page>
-</div>
+<courses-header></courses-header>
+<router-outlet></router-outlet>
+<footer></footer>
 <loading-component></loading-component>

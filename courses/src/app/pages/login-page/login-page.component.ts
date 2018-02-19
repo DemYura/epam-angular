@@ -4,6 +4,7 @@ import { FooterComponent } from '../../courses/components/footer/footer.componen
 
 import '../../../assets/css/styles.css';
 import { AuthService } from '../../courses/components/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'login-page',
@@ -16,10 +17,15 @@ export class LoginPageComponent {
     password:''
   };
 
-  constructor(public authService: AuthService) { 
+  constructor(public authService: AuthService, private router: Router) { 
   }
 
   public authenticate(): void {
-    this.authService.login(this.user.login, this.user.password);
+    this.authService.login(this.user.login, this.user.password)
+        .subscribe(loggedIn => {
+          if (loggedIn) {
+            this.router.navigate(['courses']);
+          }
+        });
   }
 }

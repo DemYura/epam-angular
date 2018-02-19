@@ -1,8 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Course } from '../../courses/course';
 import { CoursesService } from '../../courses/courses.service';
-import { HeaderComponent } from '../../courses/components/header/header.component';
-import { FooterComponent } from '../../courses/components/footer/footer.component';
 import { ToolboxComponent } from '../../courses/components/toolbox/toolbox.component';
 import { CourseDetailsComponent } from '../../courses/components/course-details/course-details.component';
 
@@ -12,6 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'courses-page',
@@ -29,7 +28,7 @@ export class CoursesPageComponent implements OnInit {
   @Output("onEditCourse") onEditEmitter = new EventEmitter<Course>();
 
   constructor(
-      public coursesService:CoursesService) {
+      public coursesService: CoursesService, private router: Router) {
       
   }
 
@@ -60,5 +59,9 @@ export class CoursesPageComponent implements OnInit {
                     params.start, this.pageSize, params.criteria)
         )
         .share();
+  }
+
+  onEditCourse(course: Course) {
+    this.router.navigate([`courses/${course.id}`]);
   }
 }

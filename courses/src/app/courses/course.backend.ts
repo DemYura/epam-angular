@@ -5,4 +5,5 @@ export interface BackendCourse {
   name: string;
   description: string;
   isTopRated: boolean;
+  authors: Array<any>;
 }
