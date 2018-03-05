@@ -10,7 +10,7 @@ export class AuthService {
   private authDetails: BehaviorSubject<AuthDetails> = 
       new BehaviorSubject({userName: '', password: ''});  
   public tokenSubject$: BehaviorSubject<string> = new BehaviorSubject('');
-  public authErrorSubject$: Subject<string> = new Subject();
+  public authErrorSubject$: BehaviorSubject<string> = new BehaviorSubject(null);
 
   constructor(private http: Http) {
     this.baseUrl = 'http://localhost:3004';

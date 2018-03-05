@@ -5,6 +5,10 @@ import { FooterComponent } from '../../courses/components/footer/footer.componen
 import '../../../assets/css/styles.css';
 import { AuthService } from '../../courses/components/auth/auth.service';
 import { Router } from '@angular/router';
+import { AppState, getAuthError } from '../../store/reducers';
+import { Store } from '@ngrx/store';
+import { LoginRequestedAction } from '../../courses/actions/auth.actions';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'login-page',
@@ -17,15 +21,17 @@ export class LoginPageComponent {
     password:''
   };
 
-  constructor(public authService: AuthService, private router: Router) { 
+  public authError$: Observable<string>;
+
+  constructor(public store:Store<AppState>) { 
+    this.authError$ = store.select(getAuthError);
   }
 
   public authenticate(): void {
-    this.authService.login(this.user.login, this.user.password)
-        .subscribe(loggedIn => {
-          if (loggedIn) {
-            this.router.navigate(['courses']);
-          }
-        });
+    debugger;
+    this.store.dispatch(new LoginRequestedAction({
+        login: this.user.login, 
+        password: this.user.password
+      }));
   }
 }

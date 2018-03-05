@@ -7,7 +7,8 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "lib": [ "es2015", "dom" ],
-      "noImplicitAny": true,
+      "noImplicitAny": false,
+      "noStrictGenericChecks": true,
       "suppressImplicitAnyIndexErrors": true,
       "typeRoots": [
         "node_modules/@types/"

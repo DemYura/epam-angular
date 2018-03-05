@@ -2,7 +2,7 @@
     <div class="login-form login-form-column">
         <form #form="ngForm" (submit)="authenticate()">
             <div class="login-form-row">
-                <span class="validation-errors">{{authService.authErrorSubject$ | async}}</span>
+                <span class="validation-errors">{{authError$ | async}}</span>
             </div>
             <div class="login-form-row">
                 <div class="login-form-column">

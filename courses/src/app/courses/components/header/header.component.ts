@@ -4,6 +4,9 @@ import '../../../../assets/css/styles.css';
 import { AuthService } from '../auth/auth.service';
 import { Router, ActivatedRoute, NavigationEnd, Event, UrlSegment } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import { AppState, getIsAuthenticated, getUserName } from '../../../store/reducers';
+import { LogoutRequestedAction } from '../../actions/auth.actions';
 
 @Component({
   selector: 'courses-header',
@@ -12,10 +15,12 @@ import { Observable } from 'rxjs/Observable';
 })
 export class HeaderComponent { 
 
+  public isAuthenticated$: Observable<boolean>;
+  public userName$: Observable<string>;
   public breadcrumbs: Breadcrumb[] = [];
 
   constructor(
-      public authService: AuthService, 
+      public store: Store<AppState>,
       private activatedRoute: ActivatedRoute, 
       private router: Router) {  
     this.router.events
@@ -34,10 +39,12 @@ export class HeaderComponent {
               );
           }
         });
+    this.isAuthenticated$ = this.store.select(getIsAuthenticated);
+    this.userName$ = this.store.select(getUserName);
   }
 
   public logoutClicked(): void {
-    this.authService.logout();
+    this.store.dispatch(new LogoutRequestedAction());
   }
 }
 
