@@ -28,7 +28,6 @@ export class LoginPageComponent {
   }
 
   public authenticate(): void {
-    debugger;
     this.store.dispatch(new LoginRequestedAction({
         login: this.user.login, 
         password: this.user.password

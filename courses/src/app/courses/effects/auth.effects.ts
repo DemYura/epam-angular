@@ -22,7 +22,6 @@ export class AuthEffects {
         .map((action:auth.LoginRequestedAction) => action.payload)
         .switchMap(payload => 
             this.authService.login(payload.login, payload.password))
-        .do(console.log)
         .map(res => {
             if (res) {
                 return new auth.AuthenticatedAction({

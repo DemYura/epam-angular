@@ -19,7 +19,6 @@ export function authReducer(
         case AuthActionTypes.LOGIN_REQUESTED:
         case AuthActionTypes.LOGOUT_REQUESTED:
         case AuthActionTypes.USER_INFO_REQUESTED: {
-            debugger;
             return Object.assign({}, state, {
                 loading: true,
             })
