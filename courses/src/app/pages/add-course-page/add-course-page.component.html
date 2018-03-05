@@ -1,4 +1,3 @@
-<courses-header></courses-header>
 <div class="course-form">
     <form #courseForm="ngForm" (submit)="onFormSubmit(courseForm)">
         <div class="course-form-row">
@@ -88,8 +87,7 @@
         </div>
         <div class="course-form-row button-set">
             <button type="submit" [disabled]="courseForm.invalid || courseForm.pristine">Save</button>
-            <button (click)="onCancelEmitter.emit()">Cancel</button>
+            <button (click)="onCancelClicked()">Cancel</button>
         </div>
     </form>    
-</div>
-<footer></footer>    
+</div>  

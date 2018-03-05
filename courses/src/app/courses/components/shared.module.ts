@@ -13,12 +13,15 @@ import { XHRBackend, RequestOptions } from '@angular/http';
 import { CourseAuthorsControl } from './controls/course-authors.control';
 import { CourseDateControl } from './controls/course-date.control';
 import { CourseDurationControl } from './controls/course-duration.control';
+import { AuthGuard } from './auth/auth.guard';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
     BrowserModule, 
     HttpModule,
     FormsModule,
+    RouterModule
   ],
   declarations: [
     HeaderComponent, 
@@ -38,6 +41,7 @@ import { CourseDurationControl } from './controls/course-duration.control';
   ],
   providers: [ 
     AuthService,
+    AuthGuard,
     {
       provide: AuthorizedHttp,
       useFactory: (backend: XHRBackend, options: RequestOptions, authService: AuthService) => {

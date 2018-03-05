@@ -12,6 +12,7 @@ import { CourseSearchPipe } from '../../courses/pipes/course-search.pipe';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'add-course-page',
@@ -29,14 +30,38 @@ export class AddCoursePageComponent {
     authors: [],
   };;
   public authors$: Observable<string[]>;
-  
-  @Output("onCancelAdding") onCancelEmitter = new EventEmitter<void>(); 
+  private isNewCourse: boolean;
     
-  constructor(public coursesService:CoursesService) { 
+  constructor(
+      public coursesService:CoursesService, 
+      private router: Router,
+      private activatedRoute: ActivatedRoute) { 
     this.authors$ = coursesService.listAuthors();
+    this.activatedRoute.url.subscribe(segments => {
+        this.isNewCourse = segments.map(segment => segment.path)
+            .filter(segment => segment.indexOf('new') >= 0)
+            .length > 0;
+    });
+    this.activatedRoute.params
+        .map(param => param.id)
+        .filter(id => id != null)
+        .switchMap(id => this.coursesService.getById(id))
+        .subscribe(course => this.course = course);
   }
 
   onFormSubmit(form:any) {
-    console.dir(this.course);
+    if (form.valid) {
+      if (this.isNewCourse) {
+        this.coursesService.createCourse(this.course)
+        .subscribe(() => this.router.navigate(['courses']));
+      } else {
+        this.coursesService.updateCourse(this.course)
+        .subscribe(() => this.router.navigate(['courses']));
+      }
+    }
+  }
+
+  onCancelClicked() {
+    this.router.navigate(['courses']);
   }
 }

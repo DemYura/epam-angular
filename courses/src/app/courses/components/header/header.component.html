@@ -3,8 +3,10 @@
         <img src="../../../../assets/images/logo.png">
     </div>
     <div class="header-element breadcrumbs" *ngIf="authService.isAuthenticated() | async">
-        <div class="breadcrumbs-element">
-            Courses
+        <div class="breadcrumbs-element" *ngFor="let breadcrumb of breadcrumbs; let last = last;">
+            <a [routerLink]="breadcrumb.path" *ngIf="!last">{{breadcrumb.name}}</a>
+            <span *ngIf="!last">></span>
+            <span *ngIf="last">{{breadcrumb.name}}</span>
         </div>
     </div>
     <div class="header-element user-data-container">

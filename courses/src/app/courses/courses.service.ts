@@ -28,7 +28,7 @@ export class CoursesService {
     params.set('search', searchCriteria);
     requestOptions.params = params;
 
-    this.loadingService.show()
+    this.loadingService.show();
 
     return this.http.request(new Request(requestOptions))
         .map(backendCourses => {
@@ -50,10 +50,51 @@ export class CoursesService {
     };
   }
 
+  private toBackendCourse(course: Course): BackendCourse {
+    return {
+      id: course.id,
+      length: course.duration,
+      date: new Date(course.creationDate).toISOString(),
+      name: course.name,
+      description: course.description,
+      isTopRated: course.topRated,
+      authors: [],
+    };
+  }
+
   public deleteCourse(courseId: number): Observable<any> {
     this.loadingService.show();
 
     return this.http.delete(`${this.baseUrl}/courses/${courseId}`)
+        .map((result) => {
+          this.loadingService.hide();
+          return result;
+        });
+  }
+
+  public getById(courseId: number): Observable<Course> {
+    this.loadingService.show();
+    return this.http.get(`${this.baseUrl}/courses/${courseId}`)
+        .map(backendCourse => {
+          this.loadingService.hide();
+          return this.toFrontendCourse(<BackendCourse>backendCourse.json());
+        });
+  }
+
+  public createCourse(course: Course): Observable<any> {
+    const backendCourse = this.toBackendCourse(course);
+    this.loadingService.show();
+    return this.http.post(`${this.baseUrl}/courses`, backendCourse)
+        .map((result) => {
+          this.loadingService.hide();
+          return result;
+        });
+  }
+
+  public updateCourse(course: Course): Observable<any> {
+    const backendCourse = this.toBackendCourse(course);
+    this.loadingService.show();
+    return this.http.put(`${this.baseUrl}/courses/${course.id}`, backendCourse)
         .map((result) => {
           this.loadingService.hide();
           return result;

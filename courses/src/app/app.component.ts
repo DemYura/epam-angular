@@ -6,6 +6,12 @@ import { LoadingComponent } from './courses/components/loading/loading.component
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Course } from './courses/course';
+import { HeaderComponent } from './courses/components/header/header.component';
+import { FooterComponent } from './courses/components/footer/footer.component';
+import { CoursesPageComponent } from './pages/courses-page/courses-page.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { AddCoursePageComponent } from './pages/add-course-page/add-course-page.component';
+
 
 @Component({
   selector: 'courses-app',
@@ -29,15 +35,5 @@ export class AppComponent {
   
   constructor(public authService:AuthService) {
 
-  }
-
-  onAddCourse() {
-    this.courseSubject$.next(this.emptyCourse)
-    this.addingCourse$.next(true);
-  }
-
-  onEditCourse(course: Course) {
-    this.courseSubject$.next(course);
-    this.addingCourse$.next(true);
   }
 }

@@ -16,13 +16,13 @@ export class AuthService {
     this.baseUrl = 'http://localhost:3004';
   }
  
-  public login(userName: string, password: string): void {
+  public login(userName: string, password: string): Observable<boolean> {
     const requestOptions = new RequestOptions();
     requestOptions.url = `${this.baseUrl}/auth/login`;
     requestOptions.method = RequestMethod.Post;
     requestOptions.body = { login: userName, password: password };       
-    this.http.request(new Request(requestOptions))
-        .subscribe(response => {
+    return this.http.request(new Request(requestOptions))
+        .flatMap(response => {
             if (response) {
               this.tokenSubject$.next(response.json().token);
               const authRequestOptions = new RequestOptions();
@@ -31,8 +31,8 @@ export class AuthService {
               authRequestOptions.headers = new Headers({
                   'Authorization': response.json().token
               });
-              this.http.request(new Request(authRequestOptions))
-                  .subscribe(userInfoResponse => {
+              return this.http.request(new Request(authRequestOptions))
+                  .flatMap(userInfoResponse => {
                       if (userInfoResponse) {
                           const name = userInfoResponse.json().name;
                           this.authDetails.next({
@@ -40,12 +40,12 @@ export class AuthService {
                               password: password,
                           });
                           console.log('Successfully logged in!');
+                          return Observable.of(true);
                       }
-                    },
-                    err => console.log(err));
+                      return Observable.of(false);
+                    });
             }
-          },
-          err => this.authErrorSubject$.next('Incorrect login/password'));
+          });
   }
 
   public logout(): void {
