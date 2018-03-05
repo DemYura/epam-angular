@@ -5,8 +5,8 @@ export const AuthActionTypes = {
     LOGIN_REQUESTED: type("[Auth] -LOGIN Requested-"),
     LOGIN_COMPLETED: type("[Auth] -LOGIN Completed-"),
 
-    AUTHENTICATED_REQUESTED: type("[Auth] -AUTHENTICATED Requested-"),
-    AUTHENTICATED_COMPLETED: type("[Auth] -AUTHENTICATED Completed-"),
+    USER_INFO_REQUESTED: type("[Auth] -USER_INFO Requested-"),
+    USER_INFO_COMPLETED: type("[Auth] -USER_INFO Completed-"),
 
     LOGOUT_REQUESTED: type("[Auth] -LOGOUT Requested-"),
     LOGOUT_COMPLETED: type("[Auth] -LOGOUT Completed-"),  
@@ -27,13 +27,13 @@ export const AuthActionTypes = {
   }
 
   export class AuthenticatedAction implements Action {
-    readonly type = AuthActionTypes.AUTHENTICATED_REQUESTED;
+    readonly type = AuthActionTypes.USER_INFO_REQUESTED;
   
     constructor(public payload: {token?: string}) {}
   }
   
   export class AuthenticatedCompletedAction implements Action {
-    readonly type = AuthActionTypes.AUTHENTICATED_COMPLETED;
+    readonly type = AuthActionTypes.USER_INFO_COMPLETED;
   
     constructor(public payload: {authenticated: boolean, userName: string}) {}
   }

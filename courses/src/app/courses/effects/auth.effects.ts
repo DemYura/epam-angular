@@ -39,7 +39,7 @@ export class AuthEffects {
 
     @Effect()
     getUserDataAction$: Observable<Action> = this.actions$
-        .ofType(auth.AuthActionTypes.AUTHENTICATED_REQUESTED)
+        .ofType(auth.AuthActionTypes.USER_INFO_REQUESTED)
         .switchMap(() => this.authService.getUserName())
         .map(userName => {
             if (userName) {

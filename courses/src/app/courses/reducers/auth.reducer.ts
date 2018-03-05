@@ -18,7 +18,7 @@ export function authReducer(
     switch (action.type) {
         case AuthActionTypes.LOGIN_REQUESTED:
         case AuthActionTypes.LOGOUT_REQUESTED:
-        case AuthActionTypes.AUTHENTICATED_REQUESTED: {
+        case AuthActionTypes.USER_INFO_REQUESTED: {
             debugger;
             return Object.assign({}, state, {
                 loading: true,
@@ -39,7 +39,7 @@ export function authReducer(
             });
         }
 
-        case AuthActionTypes.AUTHENTICATED_COMPLETED: {
+        case AuthActionTypes.USER_INFO_COMPLETED: {
             return Object.assign({}, state, {
                 token: action.payload.token,
                 userName: action.payload.userName,
