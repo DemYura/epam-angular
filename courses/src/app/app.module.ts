@@ -44,13 +44,6 @@ const ROUTES = [
     SharedModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
     StoreModule.forRoot(reducers),
-    StoreRouterConnectingModule.forRoot({
-      /*
-        They stateKey defines the name of the state used by the router-store reducer.
-        This matches the key defined in the map of reducers
-      */
-      stateKey: 'router',
-    }),
     StoreDevtoolsModule.instrument({
       name: 'Courses DevTools',
     }),
