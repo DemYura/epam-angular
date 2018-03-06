@@ -14,6 +14,16 @@ import { AddCoursePageComponent } from './pages/add-course-page/add-course-page.
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { AuthGuard } from './courses/components/auth/auth.guard';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule, Effect } from '@ngrx/effects';
+import {
+  StoreRouterConnectingModule,
+  RouterStateSerializer,
+} from '@ngrx/router-store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { reducers } from './store/reducers';
+import { AuthEffects } from './courses/effects/auth.effects';
+
 const ROUTES = [
   {path: '', component: LoginPageComponent},
   {path: 'login', component: LoginPageComponent},
@@ -33,6 +43,11 @@ const ROUTES = [
     LoginPageModule, 
     SharedModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
+    StoreModule.forRoot(reducers),
+    StoreDevtoolsModule.instrument({
+      name: 'Courses DevTools',
+    }),
+    EffectsModule.forRoot([AuthEffects]),
   ],
   declarations: [
     AppComponent,

@@ -12,6 +12,7 @@ import { CourseBorderDirective } from './directives/course-border.directive';
 import { CourseDurationPipe } from './pipes/course-duration.pipe';
 import { CoursesOrderByDatePipe } from './pipes/courses-order-by-date.pipe';
 import { CourseSearchPipe } from './pipes/course-search.pipe';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   imports: [
@@ -20,7 +21,7 @@ import { CourseSearchPipe } from './pipes/course-search.pipe';
     SharedModule,
     ConfirmationPopoverModule.forRoot({
       confirmButtonType: 'danger' 
-    })
+    }),
   ],
   declarations: [
     ToolboxComponent, 
